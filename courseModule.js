@@ -20,12 +20,12 @@ export const lookupByCourseId =  async (id) => {
 
 export const lookupByCourseName = async (name) => {
   const courses = await Course.find({}).populate("coordinator");
+  const searchText = (name ?? "").toLowerCase();
 
-  let pattern = new RegExp(name, "i");
-
-  const result = courses.filter(course =>
-    pattern.test(course.courseName)
-  );
+  const result = courses.filter((course) => {
+    const courseName = (course.courseName ?? "").toLowerCase();
+    return courseName.includes(searchText);
+  });
 
   return JSON.parse(JSON.stringify(result));
 };
