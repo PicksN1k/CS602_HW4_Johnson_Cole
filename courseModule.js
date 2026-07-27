@@ -21,7 +21,7 @@ export const lookupByCourseId =  async (id) => {
 export const lookupByCourseName = async (name) => {
   const courses = await Course.find({}).populate("coordinator");
 
-  let pattern = new RegExp(name, "i");
+  const pattern = new RegExp(name.trim(), "i");
 
   const result = courses.filter(course =>
     pattern.test(course.courseName)
