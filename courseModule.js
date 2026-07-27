@@ -22,7 +22,7 @@ export const lookupByCourseName = async (name) => {
   console.log("\nLookup by CourseName:", name);
   let result = [];
 
-  let pattern = new RegExp(name);
+  let pattern = new RegExp(name, "i");
 
   result = await Course.find({
     courseName: pattern
