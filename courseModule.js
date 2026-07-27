@@ -21,22 +21,11 @@ export const lookupByCourseId =  async (id) => {
 export const lookupByCourseName = async (name) => {
   console.log("\nLookup by CourseName:", name);
 
-  if (!name || name.trim() === "") {
-    return [];
-  }
+  let pattern = new RegExp(name, "i");
 
-  const allCourses = await Course.find({}).populate("coordinator");
-
-  const lowercasePattern = new RegExp(name.toLowerCase());
-
-  const result = allCourses.filter((course) => {
-    const lowercaseCourseName =
-      course.courseName?.toLowerCase() ?? "";
-
-    return lowercasePattern.test(lowercaseCourseName);
-  });
-
-  console.log("Matches:", result.map(course => course.courseName));
+  let result = await Course.find({
+    courseName: pattern
+  }).populate("coordinator");
 
   return JSON.parse(JSON.stringify(result));
 };
