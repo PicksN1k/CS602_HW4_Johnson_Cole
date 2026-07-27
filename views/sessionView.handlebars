@@ -1,4 +1,83 @@
-<h3>Session history</h3>
+<h2>Session History</h2>
 
-<hr/>
+<h3>Course ID Queries</h3>
 
+<ul>
+
+{{#each lookupByCourseId}}
+
+<li>
+
+<a href="/cid/{{name}}">
+
+{{displayName}}
+
+</a>
+
+</li>
+
+{{/each}}
+
+</ul>
+
+<h3>Course Name Queries</h3>
+
+<ul>
+
+{{#each lookupByCourseName}}
+
+<li>
+
+<a href="/cname/{{name}}">
+
+{{displayName}}
+
+</a>
+
+</li>
+
+{{/each}}
+
+</ul>
+
+<h3>Coordinator Queries</h3>
+
+<ul>
+
+{{#each lookupByCoordinator}}
+
+<li>
+
+<a href="/coordinator/{{this}}">
+
+{{this}}
+
+</a>
+
+</li>
+
+{{/each}}
+
+</ul>
+
+<h3>Course Descriptions</h3>
+
+<ul>
+
+{{#each courseDescrition}}
+
+<li>
+
+<a href="/describe/{{this}}">
+
+{{this}}
+
+</a>
+
+</li>
+
+{{/each}}
+
+</ul>
+
+<p><a href="/">Home</a></p>

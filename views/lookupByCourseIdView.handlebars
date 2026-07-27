@@ -1,4 +1,19 @@
-<b>Course Id Query </b>
-{{this.query}}
-<p></p>
+<h2>Course ID Query</h2>
 
+<p><strong>{{query}}</strong></p>
+
+<ul>
+{{#each courses}}
+    <li>
+        <a href="/describe/{{_id}}">{{_id}}</a>
+
+        {{courseName}}
+
+        (<a href="/coordinator/{{coordinator._id}}">
+            Contact Prof. {{coordinator.lastName}}
+        </a>)
+    </li>
+{{/each}}
+</ul>
+
+<p><a href="/">Home</a></p>
