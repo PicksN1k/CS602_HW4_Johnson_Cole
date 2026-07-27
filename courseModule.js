@@ -21,11 +21,23 @@ export const lookupByCourseId =  async (id) => {
 export const lookupByCourseName = async (name) => {
   console.log("\nLookup by CourseName:", name);
 
-  let pattern = new RegExp(name, "i");
+  if (typeof name !== "string" || name.trim() === "") {
+    return [];
+  }
 
-  let result = await Course.find({
-    courseName: pattern
+  const searchPattern = name.trim();
+
+  const result = await Course.find({
+    courseName: {
+      $regex: searchPattern,
+      $options: "i"
+    }
   }).populate("coordinator");
+
+  console.log(
+    "Matches:",
+    result.map(course => course.courseName)
+  );
 
   return JSON.parse(JSON.stringify(result));
 };
