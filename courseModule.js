@@ -21,11 +21,11 @@ export const lookupByCourseId =  async (id) => {
 export const lookupByCourseName = async (name) => {
   console.log("\nLookup by CourseName:", name);
 
-  let pattern = new RegExp(name, "i");
-  console.log(pattern);
-
   let result = await Course.find({
-    courseName: pattern
+    courseName: {
+      $regex: name,
+      $options: "i"
+    }
   }).populate("coordinator");
 
   console.log(result.map(c => c.courseName));
