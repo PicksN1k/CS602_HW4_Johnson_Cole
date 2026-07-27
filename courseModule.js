@@ -20,13 +20,15 @@ export const lookupByCourseId =  async (id) => {
 
 export const lookupByCourseName = async (name) => {
   console.log("\nLookup by CourseName:", name);
-  let result = [];
 
   let pattern = new RegExp(name, "i");
+  console.log(pattern);
 
-  result = await Course.find({
+  let result = await Course.find({
     courseName: pattern
   }).populate("coordinator");
+
+  console.log(result.map(c => c.courseName));
 
   return JSON.parse(JSON.stringify(result));
 };
