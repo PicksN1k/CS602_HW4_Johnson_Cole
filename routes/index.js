@@ -107,17 +107,18 @@ router.get("/cname", async function (req, res) {
   }
 });
 
-router.post('/cname', async function(req, res) {
+router.post("/cname", async function (req, res) {
+  const name = req.body.name.trim();
+  const result = await courseDB.lookupByCourseName(name);
 
-  let name = req.body.name;
-  let result = await courseDB.lookupByCourseName(name);
+  if (!req.session.sessionData.lookupByCourseName.includes(encodeURIComponent(name))) {
+    req.session.sessionData.lookupByCourseName.push(encodeURIComponent(name));
+  }
 
-  if (!req.session.sessionData['lookupByCourseName'].includes(encodeURIComponent(name)))
-    req.session.sessionData['lookupByCourseName'].push(encodeURIComponent(name));
-
-  res.render('lookupByCourseNameView',
-    {query: name, courses: result});
-
+  res.render("lookupByCourseNameView", {
+    query: name,
+    courses: result
+  });
 });
 
 router.get('/cname/:name', async function(req, res) {
