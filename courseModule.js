@@ -20,26 +20,15 @@ export const lookupByCourseId =  async (id) => {
 
 export const lookupByCourseName = async (name) => {
   const courses = await Course.find({}).populate("coordinator");
-  const searchText = (name ?? "").trim();
 
-  let regex;
-  try {
-    regex = new RegExp(searchText, 'i');
-  } catch {
-    regex = new RegExp(escapeRegExp(searchText), 'i');
-  }
+  let pattern = new RegExp(name, "i");
 
-  const result = courses.filter((course) => {
-    const courseName = (course.courseName ?? "");
-    return regex.test(courseName);
-  });
+  const result = courses.filter(course =>
+    pattern.test(course.courseName)
+  );
 
   return JSON.parse(JSON.stringify(result));
 };
-
-function escapeRegExp(text) {
-  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
 
 export const lookupByCoordinator =  async (id) => {
 	console.log("\nLookup by Coordinator:", id);
