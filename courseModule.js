@@ -20,18 +20,23 @@ export const lookupByCourseId =  async (id) => {
 
 export const lookupByCourseName = async (name) => {
   console.log("\nLookup by CourseName:", name);
-  let result = [];
 
-  const pattern = name.toLowerCase();
+  if (!name || name.trim() === "") {
+    return [];
+  }
 
-  result = await Course.find({
-    $expr: {
-      $regexMatch: {
-        input: { $toLower: "$courseName" },
-        regex: pattern
-      }
-    }
-  }).populate("coordinator");
+  const allCourses = await Course.find({}).populate("coordinator");
+
+  const lowercasePattern = new RegExp(name.toLowerCase());
+
+  const result = allCourses.filter((course) => {
+    const lowercaseCourseName =
+      course.courseName?.toLowerCase() ?? "";
+
+    return lowercasePattern.test(lowercaseCourseName);
+  });
+
+  console.log("Matches:", result.map(course => course.courseName));
 
   return JSON.parse(JSON.stringify(result));
 };
