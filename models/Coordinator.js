@@ -5,11 +5,19 @@ const Schema = mongoose.Schema;
 
 // Fill in the code
 const coordinatorSchema = new Schema({
-  
 
+  _id: String,
 
+  firstName: String,
 
-}, 
+  lastName: String,
+
+  courses: [{
+    type: String,
+    ref: 'Course'
+  }]
+
+},
 {collection : 'coordinators'});
 
 export const Coordinator = mongoose.model(

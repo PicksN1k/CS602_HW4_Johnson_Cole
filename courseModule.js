@@ -9,7 +9,11 @@ export const lookupByCourseId =  async (id) => {
 	console.log("\nLookup by CourseId:", id);
 	let result = [];
 
-	// Fill in the code
+	let pattern = new RegExp(id);
+
+	result = await Course.find({
+  		_id: pattern
+	}).populate("coordinator");
 
 	return JSON.parse(JSON.stringify(result));
 };
@@ -18,7 +22,11 @@ export const lookupByCourseName = async (name) => {
   console.log("\nLookup by CourseName:", name);
   let result = [];
 
-	// Fill in the code
+	let pattern = new RegExp(name);
+
+	result = await Course.find({
+  		courseName: pattern
+	}).populate("coordinator");
   
 	return JSON.parse(JSON.stringify(result));
 };
@@ -27,7 +35,8 @@ export const lookupByCoordinator =  async (id) => {
 	console.log("\nLookup by Coordinator:", id);
 	let result = [];
 
-	// Fill in the code
+	result = await Coordinator.findById(id)
+  		.populate("courses");
 	
 	return JSON.parse(JSON.stringify(result));
 };
