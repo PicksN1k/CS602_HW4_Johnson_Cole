@@ -43,15 +43,24 @@ router.get('/cid', async function(req, res) {
 });
 
 router.post('/cid', async function(req, res) {
-  let id = req.body.id;
+
+  let id = req.body.id.trim();
+
+  // Don't search if the input is empty
+  if (id === "") {
+    return res.render('lookupByCourseIdForm');
+  }
+
   let result = await courseDB.lookupByCourseId(id);
 
   if (!req.session.sessionData['lookupByCourseId'].includes(encodeURIComponent(id)))
-      req.session.sessionData['lookupByCourseId'].push(encodeURIComponent(id));
+    req.session.sessionData['lookupByCourseId'].push(encodeURIComponent(id));
 
-    
-  res.render('lookupByCourseIdView', 
-    {query: id, courses: result});
+  res.render('lookupByCourseIdView', {
+    query: id,
+    courses: result
+  });
+
 });
 
 
@@ -102,6 +111,12 @@ router.get('/cname', async function (req, res) {
 router.post('/cname', async function (req, res) {
 
   let name = req.body.name.trim();
+
+  // Don't search if the input is empty
+  if (name === "") {
+    return res.render('lookupByCourseNameForm');
+  }
+
   let result = await courseDB.lookupByCourseName(name);
 
   if (!req.session.sessionData['lookupByCourseName'].includes(encodeURIComponent(name)))
