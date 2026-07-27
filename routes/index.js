@@ -77,53 +77,46 @@ router.get('/cid/:id', async function(req, res) {
 });
 
 
-router.get("/cname", async function (req, res) {
-  try {
-    if (typeof req.query.name === "string") {
-      const name = req.query.name.trim();
+router.get('/cname', async function (req, res) {
 
-      if (name === "") {
-        return res.render("lookupByCourseNameForm");
-      }
+  if (req.query.name) {
 
-      const result = await courseDB.lookupByCourseName(name);
+    let name = req.query.name.trim();
+    let result = await courseDB.lookupByCourseName(name);
 
-      if (
-        !req.session.sessionData.lookupByCourseName.includes(name)
-      ) {
-        req.session.sessionData.lookupByCourseName.push(name);
-      }
+    if (!req.session.sessionData['lookupByCourseName'].includes(encodeURIComponent(name)))
+      req.session.sessionData['lookupByCourseName'].push(encodeURIComponent(name));
 
-      return res.render("lookupByCourseNameView", {
-        query: name,
-        result: result
-      });
-    }
+    res.render('lookupByCourseNameView', {
+      query: name,
+      courses: result
+    });
 
-    return res.render("lookupByCourseNameForm");
-  } catch (error) {
-    console.error("Course-name lookup failed:", error);
-    return res.status(500).send("Course-name lookup failed");
+  } else {
+    res.render('lookupByCourseNameForm');
   }
+
 });
 
-router.post("/cname", async function (req, res) {
-  const name = req.body.name.trim();
-  const result = await courseDB.lookupByCourseName(name);
 
-  if (!req.session.sessionData.lookupByCourseName.includes(encodeURIComponent(name))) {
-    req.session.sessionData.lookupByCourseName.push(encodeURIComponent(name));
-  }
+router.post('/cname', async function (req, res) {
 
-  res.render("lookupByCourseNameView", {
+  let name = req.body.name.trim();
+  let result = await courseDB.lookupByCourseName(name);
+
+  if (!req.session.sessionData['lookupByCourseName'].includes(encodeURIComponent(name)))
+    req.session.sessionData['lookupByCourseName'].push(encodeURIComponent(name));
+
+  res.render('lookupByCourseNameView', {
     query: name,
     courses: result
   });
+
 });
 
-router.get('/cname/:name', async function(req, res) {
+router.get('/cname/:name', async function (req, res) {
 
-  let name = req.params.name;
+  let name = req.params.name.trim();
   let result = await courseDB.lookupByCourseName(name);
 
   if (!req.session.sessionData['lookupByCourseName'].includes(encodeURIComponent(name)))
@@ -131,13 +124,15 @@ router.get('/cname/:name', async function(req, res) {
 
   res.format({
 
-    'application/json': function() {
-      res.json({query: name, courses: result});
+    'application/json': function () {
+      res.json({ query: name, courses: result });
     },
 
-    'text/html': function() {
-      res.render('lookupByCourseNameView',
-        {query: name, courses: result});
+    'text/html': function () {
+      res.render('lookupByCourseNameView', {
+        query: name,
+        courses: result
+      });
     }
 
   });
